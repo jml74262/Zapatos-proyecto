@@ -4,7 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
   @Entity()
   export default class Zapato {
     @PrimaryGeneratedColumn({ type: "int", unsigned: true, zerofill: true})
-    public id: number;
+    public id: string;
   
     @Column({ type: "varchar", length: 16, nullable: false })
     public marca: string;
@@ -15,7 +15,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
     @Column({ type: "varchar", length: 16, nullable: false })
     public color: string;
   
-    public constructor(id: number, marca: string, talla: number, color: string) {
+    public constructor(id: string, marca: string, talla: number, color: string) {
       this.id = id;
       this.marca = marca;
       this.talla = talla;
