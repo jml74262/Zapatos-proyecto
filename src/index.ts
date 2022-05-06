@@ -1,67 +1,21 @@
-import express, { application } from 'express';
-import { json } from 'body-parser';
-import cors from 'cors';
-import ZapatoRepository from './ZapatoRepository';
-import respond from './respond';
-import Zapato from './Zapato';
+/* eslint-disable prettier/prettier */
+import express from "express";
+import { json } from "body-parser";
+import ZapatosController from "./Service-layer/controllers/ZapatosCpontroller";
+import "reflect-metadata"
+import InventoryInsController from "./Service-layer/controllers/InventoryInsController";
 
 const app = express();
+const port = 3001;
 
 app.use(json());
 
-app.use(cors());
+const zapController = new ZapatosController();
+const inventoryInsController = new InventoryInsController();
 
-//  listar zapatos
+zapController.mount(app);
+inventoryInsController.mount(app);
 
-app.get('/zapatos', (req, res) => {
-  const zapatoRepository = new ZapatoRepository();
-
-  const zapatos = zapatoRepository.list();
-
-  respond(res, 200, zapatos);
-});
-
-//  listar zapatos por id
-
-app.get('/zapatos/:id', (req, res) => {
-  const id = req.params.id;
-
-  const zapatoRepository = new ZapatoRepository();
-
-  const zapatos = zapatoRepository.get(id);
-
-  if (!zapatos) {
-    respond(res, 404);
-
-    return;
-  }
-
-  respond(res, 200, zapatos);
-});
-
-app.post('/zapatos', (req, res) => {
-  const zapato = new Zapato(
-    req.body.id,
-    req.body.marca,
-    req.body.talla,
-    req.body.color
-  );
-
-  const zapatoRepository = new ZapatoRepository();
-  zapatoRepository.add(zapato);
-
-  respond(res, 200, zapato);
-});
-
-app.delete('/zapatos/:id', (req, res) => {
-  const id = req.params.id;
-
-  const zapatoRepository = new ZapatoRepository();
-  zapatoRepository.delete(id);
-
-  respond(res, 200);
-});
-
-app.listen(3001, () => {
-  console.log('App started on port 3001');
-});
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+})
